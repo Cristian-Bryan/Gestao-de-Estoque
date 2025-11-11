@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão de Estoque</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <header class="mb-4">
+            <h1 class="text-center mb-4">Sistema de Gestão de Estoque</h1>
+            <nav class="d-flex justify-content-center gap-3 mb-4">
+                <button class="btn btn-outline-success" onclick="showSection('produtos')">Produtos</button>
+                <button class="btn btn-outline-success" onclick="showSection('entradas')">Entradas</button>
+                <button class="btn btn-outline-success" onclick="showSection('saidas')">Saídas</button>
+                <button class="btn btn-outline-success" onclick="showSection('relatorios')">Relatórios</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Seção de Produtos -->
+            <section id="produtos" class="section-content bg-white p-4 rounded shadow-sm">
+                <h2 class="mb-4">Cadastro de Produtos</h2>
+                <form id="produto-form" class="row g-3">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="produto-nome" placeholder="Nome do Produto" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="number" class="form-control" id="produto-codigo" placeholder="Código do Produto" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="number" class="form-control" id="produto-quantidade" placeholder="Quantidade Inicial" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="number" step="0.01" class="form-control" id="produto-preco" placeholder="Preço Unitário" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-dark w-100">Cadastrar Produto</button>
+                    </div>
+                </form>
+                <div class="table-container mt-4">
+                    <h3 class="mb-3">Lista de Produtos</h3>
+                    <div class="table-responsive">
+                        <table id="produtos-table" class="table table-hover table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nome</th>
+                                    <th>Quantidade</th>
+                                    <th>Preço</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="produtos-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Entradas -->
+            <section id="entradas" class="section-content hidden bg-white p-4 rounded shadow-sm">
+                <h2 class="mb-4">Registro de Entradas</h2>
+                <form id="entrada-form" class="row g-3">
+                    <div class="col-md-12">
+                        <select id="entrada-produto" class="form-select" required>
+                            <option value="">Selecione o Produto</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="number" class="form-control" id="entrada-quantidade" placeholder="Quantidade" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" id="entrada-data" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-dark w-100">Registrar Entrada</button>
+                    </div>
+                </form>
+                <div class="table-container">
+                    <h3>Histórico de Entradas</h3>
+                    <table id="entradas-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entradas-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Seção de Saídas -->
+            <section id="saidas" class="section-content hidden bg-white p-4 rounded shadow-sm">
+                <h2 class="mb-4">Registro de Saídas</h2>
+                <form id="saida-form" class="row g-3">
+                    <div class="col-md-12">
+                        <select id="saida-produto" class="form-select" required>
+                            <option value="">Selecione o Produto</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="number" class="form-control" id="saida-quantidade" placeholder="Quantidade" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" id="saida-data" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-dark w-100">Registrar Saída</button>
+                    </div>
+                </form>
+                <div class="table-container">
+                    <h3>Histórico de Saídas</h3>
+                    <table id="saidas-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="saidas-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Seção de Relatórios -->
+            <section id="relatorios" class="section-content hidden bg-white p-4 rounded shadow-sm">
+                <h2 class="mb-4">Relatórios de Inventário</h2>
+                <div class="relatorios-controls d-flex gap-3 mb-4">
+                    <button class="btn btn-dark flex-grow-1" onclick="gerarRelatorioEstoque()">Relatório de Estoque Atual</button>
+                    <button class="btn btn-dark flex-grow-1" onclick="gerarRelatorioMovimentacao()">Relatório de Movimentação</button>
+                </div>
+                <div id="relatorio-container" class="mt-4"></div>
+            </section>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
